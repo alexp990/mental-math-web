@@ -6,25 +6,11 @@ const randomIntegerRange = (mi, ma) => {
 }
 
 export function GameScreen({ onGoHome, selectedModes, ranges }) {
-<<<<<<< HEAD
-
-  const [answer, setAnswer] = useState("");
-  const [flash, setFlash] = useState(null);
-  const [score, setScore] = useState(0);
-  const [time, setTime] = useState(20);
-  const [elapsed, setElapsed] = useState(0);
-  const [started, setStarted] = useState(false);
-
-  const generateQuestion = () => {
-    const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
-    const num1 = randomIntegerRange(ranges[operator]["min1"], ranges[operator]["max1"]);
-    const num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
-=======
   
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
       const [score,setScore] = useState(0);
-      const [time,setTime] = useState(20);
+      const [time,setTime] = useState(2);
       const [elapsed,setElapsed] = useState(0);
       const [started,setStarted] = useState(false);
 
@@ -32,7 +18,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
     const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
     let num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
     let num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
->>>>>>> 23f43f9bd1d78cc7ee65659b7b73b04aea24997b
+
     let correct;
 
     switch (operator) {
@@ -97,6 +83,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
     const interval = setInterval(() => {
       setTime(t => {
         if (t <= 1) {
+          onGameOver(score);
           setStarted(false);
           return 0;
         }
