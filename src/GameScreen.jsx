@@ -14,6 +14,13 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
   const [elapsed, setElapsed] = useState(0);
   const [started, setStarted] = useState(false);
 
+  const wordToSymbolMap = {
+    'addition': '+',
+    'subtraction': '-',
+    'multiplication': '×',
+    'division': '÷'
+  }; // Maps words onto symbols for display
+
   const generateQuestion = () => {
     const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
     let num1 = randomIntegerRange(ranges[operator]["min1"], ranges[operator]["max1"]);
@@ -102,7 +109,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
       <div className="text-2xl text-white" >Time left:{time}</div>
       <div className='flex flex-row justify-center items-center gap-2 text-4xl text-white'>
         <div className='whitespace-nowrap '>
-          {currQuestion.num1} {currQuestion.operator} {currQuestion.num2} =
+          {currQuestion.num1} {wordToSymbolMap[currQuestion.operator]} {currQuestion.num2} =
         </div>
         <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${flash === "green"
           ? "bg-green-500 border-green-500"
