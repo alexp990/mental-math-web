@@ -7,13 +7,13 @@ function App() {
 
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('landing') // landing, game, results
-  const [selectedModes, setSelectedModes] = useState(['addition', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
+  const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
 
   const [ranges, setRanges] = useState({
-    addition: { min: 12, max: 100 },
-    subtraction: { min: 12, max: 100 },
-    multiplication: { min: 2, max: 12 },
-    division: { min: 2, max: 12 }
+    addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
+    subtraction: { min1: 2, max1: 100, min2: 2, max2: 100 },
+    multiplication: { min1: 2, max1: 12, min2: 2, max2: 12 },
+    division: { min1: 2, max1: 12, min2: 2, max2: 12 }
   });
 
   const [finalScore, setFinalScore] = useState(0)
