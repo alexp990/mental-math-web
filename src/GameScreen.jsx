@@ -19,7 +19,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
     const num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
     const num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
     let correct;
-
+// test
     switch (operator) {
       case "addition":
         correct = num1 + num2;
