@@ -6,7 +6,7 @@ const randomIntegerRange = (mi, ma) => {
 }
 
 export function GameScreen({ onGoHome, selectedModes, ranges }) {
-
+  
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
       const [score,setScore] = useState(0);
@@ -16,8 +16,8 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
 
   const generateQuestion = () => {
     const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
-    const num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
-    const num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
+    let num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
+    let num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
     let correct;
 
     switch (operator) {
@@ -31,7 +31,9 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
         correct = num1 * num2;
         break;
       case "division":
-        correct = num1 / num2;
+        correct = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
+        num2 = randomIntegerRange(ranges[operator]["min2"],ranges[operator]["max2"]);
+        num1 = correct * num2;
         break;
   }
     return { num1, operator, num2,correct};
@@ -108,8 +110,6 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
       : "bg-blue-600 border-amber-400"
   }`} value={answer} onChange={(e) => setAnswer(e.target.value)}/>
       </div>
-      <Button onClick={() => setCurrQuestion(generateQuestion())}>New Question</Button>
-
       <Button className='bg-blue-300 hover:bg-blue-200 w-fit p-6' onClick={onGoHome}>Home</Button>
     </div>
   );
