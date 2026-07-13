@@ -31,7 +31,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
         correct = num1 * num2;
         break;
       case "division":
-        correct = randomIntegerRange(1,12);
+        correct = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
         num2 = randomIntegerRange(ranges[operator]["min2"],ranges[operator]["max2"]);
         num1 = correct * num2;
         break;
