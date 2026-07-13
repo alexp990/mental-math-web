@@ -5,7 +5,7 @@ const randomIntegerRange = (mi, ma) => {
   return Math.floor(Math.random() * (ma - mi + 1) + mi);
 }
 
-export function GameScreen({ onGoHome, selectedModes, ranges }) {
+export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver}) {
   
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
