@@ -1,12 +1,11 @@
+import { Button } from './components/ui/button';
 export function ScoreScreen({ score, onGoHome }) {
   return (
     <div>
-      <h1>END SCREEN</h1>
+      <h1 className="">END SCREEN</h1>
       <p>Your score: {score}</p>
 
-      <button onClick={onGoHome}>
-        Home
-      </button>
+        <Button onClick={onGoHome}>Home</Button>
     </div>
   );
 }

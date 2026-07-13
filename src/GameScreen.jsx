@@ -10,7 +10,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver }) {
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
       const [score,setScore] = useState(0);
-      const [time,setTime] = useState(20);
+      const [time,setTime] = useState(2);
       const [elapsed,setElapsed] = useState(0);
       const [started,setStarted] = useState(false);
 
