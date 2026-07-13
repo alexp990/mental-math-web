@@ -17,7 +17,7 @@ export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ra
     }
   }
   const availableModes = ['addition', 'subtraction', 'multiplication', 'division'];
-  const inputStyle = "w-20 text-white text-center px-1 rounded [appearance:textfield]";
+  const inputStyle = "w-20 text-white text-center px-1 rounded [appearance:textfield] border border-slate-400";
 
   return (
     <div className='flex flex-col justify-center items-center gap-8 text-white'>
