@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { LandingScreen } from './LandingScreen';
 import { GameScreen } from './GameScreen';
-import { ScoreScreen} from './ScoreScreen';
+import { ScoreScreen } from './ScoreScreen';
 
 
 function App() {
-  const [gameOver,setGameOver] = useState(false)
+  const [gameOver, setGameOver] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('landing') // landing, game, results
   const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
@@ -64,8 +64,8 @@ function App() {
       {/* SCREEN 3: SCORE SCREEN */}
       {currentScreen === "results" && (
         <ScoreScreen
-        score={finalScore}
-        onGoHome={resetToHome}
+          score={finalScore}
+          onGoHome={resetToHome}
         />
       )}
 
