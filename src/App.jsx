@@ -9,6 +9,8 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('landing') // landing, game, results
   const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
+  const [userTime, setUserTime] = useState(120) // 2 minutes default
+
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
     subtraction: { min1: 100, max1: 2, min2: 100, max2: 2 },
@@ -49,6 +51,8 @@ function App() {
           setSelectedModes={setSelectedModes}
           ranges={ranges}
           setRanges={setRanges}
+          userTime={userTime}
+          setUserTime={setUserTime}
         />
       )}
 
@@ -59,6 +63,7 @@ function App() {
           onGameOver={endGame}
           selectedModes={selectedModes}
           ranges={ranges}
+          userTime={userTime}
         />
       )}
       {/* SCREEN 3: SCORE SCREEN */}

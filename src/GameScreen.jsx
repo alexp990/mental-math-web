@@ -5,18 +5,18 @@ const randomIntegerRange = (mi, ma) => {
   return Math.floor(Math.random() * (ma - mi + 1) + mi);
 }
 
-export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver}) {
-  
-      const [answer, setAnswer] = useState("");
-      const [flash,setFlash] = useState(null);
-      const [score,setScore] = useState(0);
-      const [time,setTime] = useState(2);
-      const [elapsed,setElapsed] = useState(0);
-      const [started,setStarted] = useState(false);
+export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTime }) {
+
+  const [answer, setAnswer] = useState("");
+  const [flash, setFlash] = useState(null);
+  const [score, setScore] = useState(0);
+  const [time, setTime] = useState(userTime);
+  const [elapsed, setElapsed] = useState(0);
+  const [started, setStarted] = useState(false);
 
   const generateQuestion = () => {
     const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
-    let num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
+    let num1 = randomIntegerRange(ranges[operator]["min1"], ranges[operator]["max1"]);
     let num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
 
     let correct;
@@ -32,8 +32,8 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver}) {
         correct = num1 * num2;
         break;
       case "division":
-        correct = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
-        num2 = randomIntegerRange(ranges[operator]["min2"],ranges[operator]["max2"]);
+        correct = randomIntegerRange(ranges[operator]["min1"], ranges[operator]["max1"]);
+        num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
         num1 = correct * num2;
         break;
     }
@@ -105,10 +105,10 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver}) {
           {currQuestion.num1} {currQuestion.operator} {currQuestion.num2} =
         </div>
         <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${flash === "green"
-            ? "bg-green-500 border-green-500"
-            : flash === "red"
-              ? "bg-red-500 border-red-500"
-              : "bg-blue-600 border-amber-400"
+          ? "bg-green-500 border-green-500"
+          : flash === "red"
+            ? "bg-red-500 border-red-500"
+            : "bg-blue-600 border-amber-400"
           }`} value={answer} onChange={(e) => setAnswer(e.target.value)} />
       </div>
       <Button className='bg-blue-300 hover:bg-blue-200 w-fit p-6' onClick={onGoHome}>Home</Button>

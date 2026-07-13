@@ -1,6 +1,6 @@
 import { Button } from './components/ui/button';
 
-export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ranges, setRanges }) {
+export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
 
   const handleRangeChange = (mode, field, newValue) => {
     setRanges({
@@ -52,6 +52,10 @@ export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ra
           </div>
         ))}
       </div>
+      <div>
+        Set User Time
+      </div>
+      <input className={inputStyle} type="number" value={userTime} onChange={(e) => setUserTime(parseInt(e.target.value) || '')} />
       <Button className='bg-emerald-700 hover:bg-emerald-500 w-fit p-6' onClick={onStartGame}>Start Game</Button>
     </div>
   );
