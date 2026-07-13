@@ -93,7 +93,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
     }, 1000);
     return () => clearInterval(interval);
 
-  }, [started])
+  }, [started, score, onGameOver])
 
   return (
     <div className='flex flex-col justify-center items-center gap-2 text-6xl text-red-600'>
