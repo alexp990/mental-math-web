@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { LandingScreen } from './LandingScreen';
 import { GameScreen } from './GameScreen';
+import { ScoreScreen} from './ScoreScreen';
 
 
 function App() {
-
+  const [gameOver,setGameOver] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentScreen, setCurrentScreen] = useState('landing') // landing, game, results
   const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
-    subtraction: { min1: 2, max1: 100, min2: 2, max2: 100 },
+    subtraction: { min1: 100, max1: 2, min2: 100, max2: 2 },
     multiplication: { min1: 2, max1: 12, min2: 2, max2: 12 },
     division: { min1: 2, max1: 12, min2: 2, max2: 12 }
   });
@@ -60,14 +61,12 @@ function App() {
           ranges={ranges}
         />
       )}
-
-      {/* SCREEN 3: RESULTS SCREEN */}
-      {currentScreen === 'results' && (
-        <div className="text-white text-center flex flex-col gap-4">
-          <h1 className="text-4xl font-bold">Game Over!</h1>
-          <p className="text-2xl">You scored: <span className="text-amber-400 font-bold">{finalScore}</span></p>
-          <button className="bg-amber-500 p-3 rounded hover:bg-amber-400" onClick={resetToHome}>Play Again</button>
-        </div>
+      {/* SCREEN 3: SCORE SCREEN */}
+      {currentScreen === "results" && (
+        <ScoreScreen
+        score={finalScore}
+        onGoHome={resetToHome}
+        />
       )}
 
     </div>

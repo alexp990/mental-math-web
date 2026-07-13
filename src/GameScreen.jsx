@@ -6,18 +6,19 @@ const randomIntegerRange = (mi, ma) => {
 }
 
 export function GameScreen({ onGoHome, selectedModes, ranges }) {
-
+  
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
       const [score,setScore] = useState(0);
-      const [time,setTime] = useState(20);
+      const [time,setTime] = useState(2);
       const [elapsed,setElapsed] = useState(0);
       const [started,setStarted] = useState(false);
 
   const generateQuestion = () => {
     const operator = selectedModes[Math.floor(Math.random() * selectedModes.length)];
-    const num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
-    const num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
+    let num1 = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
+    let num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
+
     let correct;
 
     switch (operator) {
@@ -31,10 +32,12 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
         correct = num1 * num2;
         break;
       case "division":
-        correct = num1 / num2;
+        correct = randomIntegerRange(ranges[operator]["min1"],ranges[operator]["max1"]);
+        num2 = randomIntegerRange(ranges[operator]["min2"],ranges[operator]["max2"]);
+        num1 = correct * num2;
         break;
-  }
-    return { num1, operator, num2,correct};
+    }
+    return { num1, operator, num2, correct };
   }
 
   const [currQuestion, setCurrQuestion] = useState(() => generateQuestion());
@@ -52,10 +55,10 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
             setFlash("");
             setCurrQuestion(generateQuestion());
             setAnswer("");
-            setScore(c => (c+1));
-  }, 300);
+            setScore(c => (c + 1));
+          }, 300);
 
-        }else {
+        } else {
           setFlash("red");
           setTimeout(() => {
             setFlash("");
@@ -72,7 +75,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
 
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onGoHome,answer,currQuestion]);
+  }, [onGoHome, answer, currQuestion]);
 
   useEffect(() => {
     if (!started) return;
@@ -80,13 +83,14 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
     const interval = setInterval(() => {
       setTime(t => {
         if (t <= 1) {
+          onGameOver(score);
           setStarted(false);
           return 0;
-    }
-    return t - 1;
-  });
-      setElapsed(e => (e+1))
-    },1000);
+        }
+        return t - 1;
+      });
+      setElapsed(e => (e + 1))
+    }, 1000);
     return () => clearInterval(interval);
 
   }, [started])
@@ -100,16 +104,13 @@ export function GameScreen({ onGoHome, selectedModes, ranges }) {
         <div className='whitespace-nowrap '>
           {currQuestion.num1} {currQuestion.operator} {currQuestion.num2} =
         </div>
-        <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${
-    flash === "green"
-      ? "bg-green-500 border-green-500"
-      : flash === "red"
-      ? "bg-red-500 border-red-500"
-      : "bg-blue-600 border-amber-400"
-  }`} value={answer} onChange={(e) => setAnswer(e.target.value)}/>
+        <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${flash === "green"
+            ? "bg-green-500 border-green-500"
+            : flash === "red"
+              ? "bg-red-500 border-red-500"
+              : "bg-blue-600 border-amber-400"
+          }`} value={answer} onChange={(e) => setAnswer(e.target.value)} />
       </div>
-      <Button onClick={() => setCurrQuestion(generateQuestion())}>New Question</Button>
-
       <Button className='bg-blue-300 hover:bg-blue-200 w-fit p-6' onClick={onGoHome}>Home</Button>
     </div>
   );
