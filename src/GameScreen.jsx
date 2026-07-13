@@ -33,6 +33,11 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
         correct = num1 + num2;
         break;
       case "subtraction":
+        // Makes sure num2 is smaller than num1 to avoid negative answer
+        const actualNum1 = Math.max(num1, num2);
+        const actualNum2 = Math.min(num1, num2)
+        num1 = actualNum1;
+        num2 = actualNum2;
         correct = num1 - num2;
         break;
       case "multiplication":
@@ -63,14 +68,14 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
             setCurrQuestion(generateQuestion());
             setAnswer("");
             setScore(c => (c + 1));
-          }, 300);
+          }, 75);
 
         } else {
           setFlash("red");
           setTimeout(() => {
             setFlash("");
             setAnswer("");
-          }, 300);
+          }, 75);
 
         }
       }
