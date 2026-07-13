@@ -1,6 +1,13 @@
 import { Button } from './components/ui/button';
 
 export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ranges, setRanges }) {
+
+  const handleRangeChange = (mode, field, newValue) => {
+    setRanges({
+      ...ranges, [mode]: { ...ranges[mode], [field]: parseInt(newValue) || 0 }
+    });
+  };
+
   const handleCheckboxChange = (mode) => {
     if (selectedModes.includes(mode)) {
       setSelectedModes(selectedModes.filter(m => m !== mode));
@@ -10,6 +17,8 @@ export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ra
     }
   }
   const availableModes = ['addition', 'subtraction', 'multiplication', 'division'];
+  const inputStyle = "w-20 text-white text-center px-1 rounded [appearance:textfield]";
+
   return (
     <div className='flex flex-col justify-center items-center gap-8 text-white'>
       <h2 className='text-6xl'>Select Gamemodes</h2>
@@ -22,12 +31,21 @@ export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ra
               {mode}
             </label>
 
-            <div className='flex items-center'>
+            <div className='flex items-center gap-3'>
               <span>Range (</span>
-              <input type="" name="" value="" />
-              <span>to</span>
-              <input type="" name="" value="" />
+              <input className={inputStyle} type="number" value={ranges[mode].min1 || ''} onChange={(e) => handleRangeChange(mode, 'min1', e.target.value)} />
+              <span >to</span>
+              <input className={inputStyle} type="number" value={ranges[mode].max1 || ''} onChange={(e) => handleRangeChange(mode, 'max1', e.target.value)} />
               <span>) </span>
+
+              <span>and</span>
+
+              <span>Range (</span>
+              <input className={inputStyle} type="number" value={ranges[mode].min2 || ''} onChange={(e) => handleRangeChange(mode, 'min1', e.target.value)} />
+              <span >to</span>
+              <input className={inputStyle} type="number" value={ranges[mode].max2 || ''} onChange={(e) => handleRangeChange(mode, 'max2', e.target.value)} />
+              <span>) </span>
+
 
             </div>
 
