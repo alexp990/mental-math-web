@@ -6,8 +6,7 @@ const randomIntegerRange = (mi, ma) => {
 }
 
 export function GameScreen({ onGoHome, selectedModes, ranges }) {
-  // test
-
+  
       const [answer, setAnswer] = useState("");
       const [flash,setFlash] = useState(null);
       const [score,setScore] = useState(0);
