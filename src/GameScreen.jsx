@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from './components/ui/button';
-
+// function for random ranges
 const randomIntegerRange = (mi, ma) => {
   return Math.floor(Math.random() * (ma - mi + 1) + mi);
 }
@@ -33,7 +33,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
         correct = num1 + num2;
         break;
       case "subtraction":
-        // Makes sure num2 is smaller than num1 to avoid negative answer
+        // Makes sure that num2 is smaller than num1 to avoid negative answer
         const actualNum1 = Math.max(num1, num2);
         const actualNum2 = Math.min(num1, num2)
         num1 = actualNum1;
@@ -44,6 +44,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
         correct = num1 * num2;
         break;
       case "division":
+        // Makes sure that correct divides by num2
         correct = randomIntegerRange(ranges[operator]["min1"], ranges[operator]["max1"]);
         num2 = randomIntegerRange(ranges[operator]["min2"], ranges[operator]["max2"]);
         num1 = correct * num2;
@@ -61,6 +62,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
         onGoHome();
       }
       else if (event.key === "Enter") {
+        // Checks if the answer is correct and updates score
         if (Number(answer) === currQuestion.correct) {
           setFlash("green");
           setTimeout(() => {
@@ -88,7 +90,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [onGoHome, answer, currQuestion]);
-
+  // Timer logic
   useEffect(() => {
     if (!started) return;
 
@@ -116,6 +118,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
         <div className='whitespace-nowrap '>
           {currQuestion.num1} {wordToSymbolMap[currQuestion.operator]} {currQuestion.num2} =
         </div>
+        {/* Makes button flash green/red depending on answer*/}
         <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${flash === "green"
           ? "bg-green-500 border-green-500"
           : flash === "red"
