@@ -11,7 +11,7 @@ function App() {
   const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
-    subtraction: { min1: 2, max1: 100, min2: 2, max2: 100 },
+    subtraction: { min1: 100, max1: 2, min2: 100, max2: 2 },
     multiplication: { min1: 2, max1: 12, min2: 2, max2: 12 },
     division: { min1: 2, max1: 12, min2: 2, max2: 12 }
   });
