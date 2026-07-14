@@ -18,12 +18,11 @@ export function ScoreScreen({ score, onGoHome, wrong, time }) {
 
   return (
     <div className='flex flex-col justify-center items-center gap-6'>
-      <h1 className="text-green-700 text-8xl">Well Done</h1>
-      <p className='text-4xl text-amber-400'>Your score: {score}</p>
-      <p className='text-4xl text-red-600'>Number of wrong answers: {wrong}</p>
-      <p className='text-4xl text-green-500'>Percentage: {`${(score/(score+wrong)).toFixed(2)*100}%`}</p>
-      <p className='text-4xl text-green-500'>Score/Time ratio:{(score/time).toFixed(2)}</p>
-      <Button className='bg-blue-300 hover:bg-blue-200 w-fit p-6' onClick={onGoHome}>Home</Button>
+      <p className='text-6xl text-game-text'>Your score: {score}</p>
+      <p className='text-4xl text-game-text'>Wrong answers: {wrong}</p>
+      {/* <p className='text-4xl text-game-text'>Percentage: {`${(score / (score + wrong)).toFixed(2) * 100}%`}</p> */}
+      <p className='text-4xl text-game-text'>Score/Time ratio:{score / time}</p>
+      <Button className='bg-game-primary hover:bg-game-secondary w-30 h-20 p-6' onClick={onGoHome}>Home</Button>
     </div>
   );
 }

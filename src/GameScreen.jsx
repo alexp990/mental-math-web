@@ -175,7 +175,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
       setElapsed(e => e + 1);
 
 
-    },1000);
+    }, 1000);
 
 
 
@@ -187,7 +187,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
 
 
   return (
-    <div className='flex flex-col justify-center items-center gap-6 text-6xl text-white'>
+    <div className='flex flex-col justify-center items-center gap-6 text-6xl text-game-text'>
 
       Mental Maths
 
@@ -202,7 +202,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
       </div>
 
 
-      <div className='flex items-center gap-2 text-5xl border-2 border-blue-400 p-4 rounded-md'>
+      <div className='flex items-center gap-2 text-5xl border-2 border-game-secondary p-4 rounded-md'>
 
         <div>
           {currQuestion.num1} {wordToSymbolMap[currQuestion.operator]} {currQuestion.num2} =
@@ -211,22 +211,21 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
 
         <input
           autoFocus
-          className={`w-32 outline-none border-2 rounded-md p-1 ${
-            flash === "green"
+          className={`w-32 outline-none border-2 rounded-md p-1 ${flash === "green"
             ? "bg-green-500"
             : flash === "red"
-            ? "bg-red-500"
-            : "bg-blue-600"
-          }`}
+              ? "bg-red-500"
+              : "bg-game-secondary"
+            }`}
           value={answer}
-          onChange={(e)=>setAnswer(e.target.value)}
+          onChange={(e) => setAnswer(e.target.value)}
         />
 
       </div>
 
 
       <Button
-        className="bg-blue-700 p-6"
+        className="bg-game-primary w-30 h-20 p-6"
         onClick={onGoHome}
       >
         Home

@@ -1,6 +1,6 @@
 import { Button } from './components/ui/button';
 
-export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
+export function LandingScreen({ onSignOut, onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
 
   const handleRangeChange = (mode, field, newValue) => {
     setRanges({
@@ -17,10 +17,10 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
     }
   }
   const availableModes = ['addition', 'subtraction', 'multiplication', 'division'];
-  const inputStyle = "w-20 text-white text-center px-1 rounded [appearance:textfield] border border-slate-400";
+  const inputStyle = "w-20 text-white text-center px-1 rounded [appearance:textfield] border border-game-secondary";
 
   return (
-    <div className='flex flex-col justify-center items-center gap-8 text-white'>
+    <div className='flex flex-col justify-center items-center gap-8 text-game-text'>
       <h2 className='text-6xl'>Select Gamemodes</h2>
       <Button onClick={onSignOut}>
         Sign out
@@ -30,7 +30,7 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
           <div key={mode} className='flex flex-row gap-5 items-center text-4xl'>
 
             <label className=' flex flex-row justify-center gap-4 capitalize'>
-              <input type="checkbox" checked={selectedModes.includes(mode)} onChange={() => handleCheckboxChange(mode)} className='accent-blue-600 w-10 h-10' />
+              <input type="checkbox" checked={selectedModes.includes(mode)} onChange={() => handleCheckboxChange(mode)} className='accent-game-accent w-10 h-10' />
               {mode}:
             </label>
 
@@ -61,7 +61,7 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
         </div>
         <input className={inputStyle} type="number" value={userTime} onChange={(e) => setUserTime(parseInt(e.target.value) || '')} />
       </div>
-      <Button className='bg-emerald-700 hover:bg-emerald-500 p-6 w-30 h-20' onClick={onStartGame}>Start Game</Button>
+      <Button className='bg-game-primary hover:bg-game-secondary p-6 w-30 h-20' onClick={onStartGame}>Start Game</Button>
     </div>
   );
 }
