@@ -108,7 +108,7 @@ setCurrentScreen("game");
 
 
 
-const endGame=async({score,wrong,time})=>{
+const endGame=async({score,wrong,time,elapsed})=>{
 
 
 if(gameSaved.current)return;
@@ -128,7 +128,7 @@ await addDoc(
   wrong,
   percentage: Math.round(score/(score+wrong)*100) || 0,
   time:userTime,
-  scoretimeratio: score/time,
+  scoretimeratio: (score/userTime),
   date:new Date().toISOString()
  }
 );
