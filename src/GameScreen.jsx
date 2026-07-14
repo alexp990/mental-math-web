@@ -10,6 +10,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
   const [answer, setAnswer] = useState("");
   const [flash, setFlash] = useState(null);
   const [score, setScore] = useState(0);
+  const [wrong, setWrong] = useState(0);
   const [time, setTime] = useState(userTime);
   const [elapsed, setElapsed] = useState(0);
   const [started, setStarted] = useState(false);
@@ -69,7 +70,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
             setFlash("");
             setCurrQuestion(generateQuestion());
             setAnswer("");
-            setScore(c => (c + 1));
+            setScore(s => (s + 1));
           }, 75);
 
         } else {
@@ -77,6 +78,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
           setTimeout(() => {
             setFlash("");
             setAnswer("");
+            setWrong(w =>(w+1));
           }, 75);
 
         }
@@ -97,7 +99,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
     const interval = setInterval(() => {
       setTime(t => {
         if (t <= 1) {
-          onGameOver(score);
+          onGameOver({score,wrong});
           setStarted(false);
           return 0;
         }
@@ -107,12 +109,13 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
     }, 1000);
     return () => clearInterval(interval);
 
-  }, [started, score, onGameOver])
+  }, [started, score, wrong, onGameOver])
 
   return (
     <div className='flex flex-col justify-center items-center gap-2 text-6xl text-red-600'>
       Mental Maths
       <div className="text-2xl text-white">Score:{score}</div>
+      <div className='text-2xl text-white'>Wrong:{wrong}</div>
       <div className="text-2xl text-white" >Time left:{time}</div>
       <div className='flex flex-row justify-center items-center gap-2 text-4xl text-white'>
         <div className='whitespace-nowrap '>

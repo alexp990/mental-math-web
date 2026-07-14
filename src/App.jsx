@@ -18,11 +18,12 @@ function App() {
     division: { min1: 2, max1: 12, min2: 2, max2: 12 }
   });
 
-  const [finalScore, setFinalScore] = useState(0)
+  const [finalScore, setFinalScore] = useState(0);
+  const [finalWrong, setFinalWrong] = useState(0);
 
   // Hand-off actions 
   const startGame = () => {
-    // Dont start if no game modes selected
+    // Don't start if no game modes selected
     if (selectedModes.length === 0) {
       alert("Please select at least one game mode before starting!");
       return;
@@ -30,8 +31,9 @@ function App() {
     setCurrentScreen('game');
   };
 
-  const endGame = (score) => {
+  const endGame = ({score,wrong}) => {
     setFinalScore(score);
+    setFinalWrong(wrong)
     setCurrentScreen('results');
   };
 
@@ -70,6 +72,7 @@ function App() {
       {currentScreen === "results" && (
         <ScoreScreen
           score={finalScore}
+          wrong={finalWrong}
           onGoHome={resetToHome}
         />
       )}
