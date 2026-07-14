@@ -175,7 +175,7 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
       setElapsed(e => e + 1);
 
 
-    },1000);
+    }, 1000);
 
 
 
@@ -211,22 +211,21 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
 
         <input
           autoFocus
-          className={`w-32 outline-none border-2 rounded-md p-1 ${
-            flash === "green"
-            ? "bg-green-500"
-            : flash === "red"
-            ? "bg-red-500"
-            : "bg-blue-600"
-          }`}
+          className={`w-32 outline-none border-2 rounded-md p-1 ${flash === "green"
+              ? "bg-green-500"
+              : flash === "red"
+                ? "bg-red-500"
+                : "bg-blue-600"
+            }`}
           value={answer}
-          onChange={(e)=>setAnswer(e.target.value)}
+          onChange={(e) => setAnswer(e.target.value)}
         />
 
       </div>
 
 
       <Button
-        className="bg-blue-700 p-6"
+        className="bg-blue-700 w-30 h-20 p-6"
         onClick={onGoHome}
       >
         Home
