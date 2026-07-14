@@ -128,7 +128,7 @@ await addDoc(
   wrong,
   percentage: Math.round(score/(score+wrong)*100) || 0,
   time:userTime,
-  scoretimeratio: (score/userTime),
+  scoretimeratio: (score/userTime).toFixed(2),
   date:new Date().toISOString()
  }
 );
