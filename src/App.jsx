@@ -1,194 +1,222 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LandingScreen } from './LandingScreen';
 import { GameScreen } from './GameScreen';
 import { ScoreScreen } from './ScoreScreen';
-import { auth } from "./firebase";
+
+import { auth, db } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+
 import { LoginScreen } from "./LoginScreen";
-import { doc, setDoc, getDoc, addDoc, collection} from "firebase/firestore";
-import { db } from "./firebase";
-import { useRef } from 'react'
+
+import {
+  doc,
+  getDoc,
+  setDoc,
+  addDoc,
+  collection
+} from "firebase/firestore";
 
 
-function App() {
-  const gameSaved = useRef(false);
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+function App(){
 
-  const [gameOver, setGameOver] = useState(false)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentScreen, setCurrentScreen] = useState('landing') // landing, game, results
-  const [selectedModes, setSelectedModes] = useState(['addition', 'subtraction', 'multiplication', 'division']) // a list of selected modes e.g. ['addition', 'division', 'multiplication'] of any length max 4 
-  const [userTime, setUserTime] = useState(120) // 2 minutes default
-  const [stats, setStats] = useState({
-    highScore: 0,
-    gamesPlayed: 0,
-    totalCorrect: 0,
-    totalWrong: 0
-  });
+const gameSaved = useRef(false);
 
-  const [ranges, setRanges] = useState({
-    addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
-    subtraction: { min1: 2, max1: 100, min2: 2, max2: 100 },
-    multiplication: { min1: 2, max1: 12, min2: 2, max2: 12 },
-    division: { min1: 2, max1: 12, min2: 2, max2: 12 }
-  });
+const [user,setUser] = useState(null);
+const [loading,setLoading] = useState(true);
 
-  const [finalScore, setFinalScore] = useState(0);
-  const [finalWrong, setFinalWrong] = useState(0);
+const [currentScreen,setCurrentScreen] = useState("landing");
 
-  // Hand-off actions 
-  const startGame = () => {
-    // Don't start if no game modes selected
-    if (selectedModes.length === 0) {
-      alert("Please select at least one game mode before starting!");
-      return;
-    }
-    setCurrentScreen('game');
-  };
+const [selectedModes,setSelectedModes] = useState([
+  "addition",
+  "subtraction",
+  "multiplication",
+  "division"
+]);
 
-  const endGame = async ({score, wrong}) => {
-
-    if (gameSaved.current) return;
-
-    gameSaved.current = true;
-    setFinalScore(score);
-    setFinalWrong(wrong);
-
-    const totalQuestions = score + wrong;
-
-    const percentage = totalQuestions === 0
-      ? 0
-      : `${Math.round((score / totalQuestions) * 100)}%`;
-
-    const session = {
-      score: score,
-      wrong: wrong,
-      percentage: percentage,
-      time: userTime,
-      date: new Date().toISOString()
-    };
-
-    // Save this individual game session
-    await addDoc(
-      collection(db, "users", user.uid, "sessions"),
-      session
-    );
+const [userTime,setUserTime] = useState(120);
 
 
-    // Update overall stats
-    const newStats = {
-      highScore: Math.max(stats.highScore, score),
-      gamesPlayed: stats.gamesPlayed + 1,
-      totalCorrect: stats.totalCorrect + score,
-      totalWrong: stats.totalWrong + wrong
-    };
-
-    await setDoc(
-      doc(db, "users", user.uid, "stats", "overall"),
-      newStats
-    );
-
-    setStats(newStats);
-    setCurrentScreen("results");
-  };
-
-  const resetToHome = () => {
-    setFinalScore(0);
-    setCurrentScreen('landing');
-  };
-  const logout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  useEffect(() => {
-    if (!user) return;
-
-    const loadStats = async () => {
-      const ref = doc(db, "users", user.uid);
-      const snapshot = await getDoc(ref);
-
-      if (snapshot.exists()) {
-        setStats(snapshot.data());
-      } else {
-        await setDoc(ref, stats);
-      }
-    };
-
-    loadStats();
-  }, [user]);
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, []);
-    if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <LoginScreen />;
-  }
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key === 'Enter' && currentScreen === 'landing') {
-        startGame();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [currentScreen, selectedModes, startGame]);
+const [stats,setStats] = useState({
+ highScore:0,
+ gamesPlayed:0,
+ totalCorrect:0,
+ totalWrong:0
+});
 
 
-  return (
-    <div className='flex min-h-screen w-full flex-col justify-center items-center bg-blue-950'>
+const [ranges,setRanges]=useState({
+ addition:{min1:2,max1:100,min2:2,max2:100},
+ subtraction:{min1:2,max1:100,min2:2,max2:100},
+ multiplication:{min1:2,max1:12,min2:2,max2:12},
+ division:{min1:2,max1:12,min2:2,max2:12}
+});
 
-      {/* SCREEN 1: LANDING SCREEN */}
-      {currentScreen === 'landing' && (
-        <LandingScreen
-          onSignOut={logout}
-          onStartGame={startGame}
-          selectedModes={selectedModes}
-          setSelectedModes={setSelectedModes}
-          ranges={ranges}
-          setRanges={setRanges}
-          userTime={userTime}
-          setUserTime={setUserTime}
-        />
-      )}
 
-      {/* SCREEN 2: GAMEPLAY SCREEN */}
-      {currentScreen === 'game' && (
-        <GameScreen
-          onGoHome={resetToHome}
-          onGameOver={endGame}
-          selectedModes={selectedModes}
-          ranges={ranges}
-          userTime={userTime}
-        />
-      )}
-      {/* SCREEN 3: SCORE SCREEN */}
-      {currentScreen === "results" && (
-        <ScoreScreen
-          score={finalScore}
-          wrong={finalWrong}
-          time={userTime}
-          onGoHome={resetToHome}
-        />
-      )}
+const [finalScore,setFinalScore]=useState(0);
+const [finalWrong,setFinalWrong]=useState(0);
 
-    </div>
-  );
+
+
+useEffect(()=>{
+
+const unsub = onAuthStateChanged(auth,(u)=>{
+ setUser(u);
+ setLoading(false);
+});
+
+return unsub;
+
+},[]);
+
+
+
+useEffect(()=>{
+
+if(!user)return;
+
+
+async function load(){
+
+const ref = doc(db,"users",user.uid,"stats","overall");
+
+const snap = await getDoc(ref);
+
+
+if(snap.exists()){
+ setStats(snap.data());
 }
+
+
+}
+
+
+load();
+
+
+},[user]);
+
+
+
+
+const startGame=()=>{
+
+gameSaved.current=false;
+
+setCurrentScreen("game");
+
+};
+
+
+
+const endGame=async({score,wrong,elapsed})=>{
+
+
+if(gameSaved.current)return;
+
+gameSaved.current=true;
+
+
+setFinalScore(score);
+setFinalWrong(wrong);
+
+
+
+await addDoc(
+ collection(db,"users",user.uid,"sessions"),
+ {
+  score,
+  wrong,
+  percentage: Math.round(score/(score+wrong)*100) || 0,
+  time:userTime,
+  elapsed,
+  date:new Date().toISOString()
+ }
+);
+
+
+
+const newStats={
+ highScore:Math.max(stats.highScore,score),
+ gamesPlayed:stats.gamesPlayed+1,
+ totalCorrect:stats.totalCorrect+score,
+ totalWrong:stats.totalWrong+wrong
+};
+
+
+await setDoc(
+ doc(db,"users",user.uid,"stats","overall"),
+ newStats
+);
+
+
+setStats(newStats);
+
+setCurrentScreen("results");
+
+};
+
+
+
+const logout=()=>{
+ signOut(auth);
+};
+
+
+
+if(loading)return <div>Loading...</div>;
+
+if(!user)return <LoginScreen/>;
+
+
+
+return (
+
+<div className="flex min-h-screen w-full flex-col justify-center items-center bg-blue-950">
+
+
+{currentScreen==="landing" &&
+<LandingScreen
+onSignOut={logout}
+onStartGame={startGame}
+selectedModes={selectedModes}
+setSelectedModes={setSelectedModes}
+ranges={ranges}
+setRanges={setRanges}
+userTime={userTime}
+setUserTime={setUserTime}
+/>
+}
+
+
+
+{currentScreen==="game" &&
+<GameScreen
+onGoHome={()=>setCurrentScreen("landing")}
+onGameOver={endGame}
+selectedModes={selectedModes}
+ranges={ranges}
+userTime={userTime}
+/>
+}
+
+
+
+{currentScreen==="results" &&
+<ScoreScreen
+score={finalScore}
+wrong={finalWrong}
+time={userTime}
+onGoHome={()=>setCurrentScreen("landing")}
+/>
+}
+
+
+
+</div>
+
+);
+
+}
+
+
 export default App;
