@@ -1,6 +1,6 @@
 import { Button } from './components/ui/button';
 
-export function LandingScreen({ onSignOut, onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
+export function LandingScreen({ onSignOut, onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime, gotoStatsScreen }) {
 
   const handleRangeChange = (mode, field, newValue) => {
     setRanges({
@@ -62,6 +62,7 @@ export function LandingScreen({ onSignOut, onStartGame, selectedModes, setSelect
         <input className={inputStyle} type="number" value={userTime} onChange={(e) => setUserTime(parseInt(e.target.value) || '')} />
       </div>
       <Button className='bg-game-primary hover:bg-game-secondary p-6 w-30 h-20' onClick={onStartGame}>Start Game</Button>
+      <Button className='bg-game-primary hover:bg-game-secondary p-6 w-30 h-20' onClick={gotoStatsScreen}>View Stats</Button>
     </div>
   );
 }
