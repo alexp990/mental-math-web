@@ -130,7 +130,7 @@ function App() {
 
 
   return (
-    <div className="flex min-h-screen w-full flex-col justify-center items-center bg-blue-950">
+    <div className="flex min-h-screen w-full flex-col justify-center items-center bg-game-bg">
       {currentScreen === "landing" && (
         <LandingScreen
           onSignOut={logout}
