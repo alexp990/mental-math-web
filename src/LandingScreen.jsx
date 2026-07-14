@@ -29,13 +29,13 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
         {availableModes.map((mode) => (
           <div key={mode} className='flex flex-row gap-5 items-center text-4xl'>
 
-            <label className=' flex flex-row justify-center gap-4'>
+            <label className=' flex flex-row justify-center gap-4 capitalize'>
               <input type="checkbox" checked={selectedModes.includes(mode)} onChange={() => handleCheckboxChange(mode)} className='accent-blue-600 w-10 h-10' />
-              {mode}
+              {mode}:
             </label>
 
             <div className='flex items-center gap-3'>
-              <span>Range (</span>
+              <span> (</span>
               <input className={inputStyle} type="number" value={ranges[mode].min1 || ''} onChange={(e) => handleRangeChange(mode, 'min1', e.target.value)} />
               <span >to</span>
               <input className={inputStyle} type="number" value={ranges[mode].max1 || ''} onChange={(e) => handleRangeChange(mode, 'max1', e.target.value)} />
@@ -43,8 +43,8 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
 
               <span>and</span>
 
-              <span>Range (</span>
-              <input className={inputStyle} type="number" value={ranges[mode].min2 || ''} onChange={(e) => handleRangeChange(mode, 'min1', e.target.value)} />
+              <span> (</span>
+              <input className={inputStyle} type="number" value={ranges[mode].min2 || ''} onChange={(e) => handleRangeChange(mode, 'min2', e.target.value)} />
               <span >to</span>
               <input className={inputStyle} type="number" value={ranges[mode].max2 || ''} onChange={(e) => handleRangeChange(mode, 'max2', e.target.value)} />
               <span>) </span>
@@ -55,11 +55,13 @@ export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelecte
           </div>
         ))}
       </div>
-      <div>
-        Set User Time
+      <div className='flex flex-row justify-center items-center gap-4 text-3xl'>
+        <div>
+          Set User Time:
+        </div>
+        <input className={inputStyle} type="number" value={userTime} onChange={(e) => setUserTime(parseInt(e.target.value) || '')} />
       </div>
-      <input className={inputStyle} type="number" value={userTime} onChange={(e) => setUserTime(parseInt(e.target.value) || '')} />
-      <Button className='bg-emerald-700 hover:bg-emerald-500 w-fit p-6' onClick={onStartGame}>Start Game</Button>
+      <Button className='bg-emerald-700 hover:bg-emerald-500 p-6 w-30 h-20' onClick={onStartGame}>Start Game</Button>
     </div>
   );
 }

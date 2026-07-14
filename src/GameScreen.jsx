@@ -78,8 +78,8 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
           setTimeout(() => {
             setFlash("");
             setAnswer("");
-            setWrong(w =>(w+1));
-            setCurrQuestion(generateQuestion());
+            setWrong(w => (w + 1));
+            // setCurrQuestion(generateQuestion());
           }, 75);
 
         }
@@ -98,38 +98,40 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
     if (!started) return;
 
     const interval = setInterval(() => {
-      setTime(t => (t-1));
+      setTime(t => (t - 1));
       setElapsed(e => (e + 1));
     }, 1000);
     return () => clearInterval(interval);
 
   }, [started])
   useEffect(() => {
-  if (time <= 0) {
-    setStarted(false);
-    onGameOver({ score, wrong });
-  }
+    if (time <= 0) {
+      setStarted(false);
+      onGameOver({ score, wrong });
+    }
   }, [time, score, wrong, onGameOver]);
 
   return (
-    <div className='flex flex-col justify-center items-center gap-2 text-6xl text-red-600'>
+    <div className='flex flex-col justify-center items-center gap-6 text-6xl text-white'>
       Mental Maths
-      <div className="text-2xl text-white">Score:{score}</div>
-      <div className='text-2xl text-white'>Wrong:{wrong}</div>
-      <div className="text-2xl text-white" >Time left:{time}</div>
-      <div className='flex flex-row justify-center items-center gap-2 text-4xl text-white'>
+      <div className='flex flex-row justify-centere items-center gap-4'>
+        <div className="text-4xl text-white">Score: {score}</div>
+        <div className='text-4xl text-white'>Wrong: {wrong}</div>
+      </div>
+      <div className="text-4xl text-white" >Time left: {time}</div>
+      <div className='flex flex-row justify-center items-center gap-2 text-5xl text-white border-2 border-blue-400 p-4 rounded-md'>
         <div className='whitespace-nowrap '>
           {currQuestion.num1} {wordToSymbolMap[currQuestion.operator]} {currQuestion.num2} =
         </div>
         {/* Makes button flash green/red depending on answer*/}
-        <input autoFocus type="text" className={`w-32 outline-none  border-2 border-amber-400 rounded-md bg-blue-600 ${flash === "green"
+        <input autoFocus type="text" className={`w-32  outline-none border-2 rounded-md border-blue-400 bg-blue-600 ${flash === "green"
           ? "bg-green-500 border-green-500"
           : flash === "red"
             ? "bg-red-500 border-red-500"
-            : "bg-blue-600 border-amber-400"
+            : "bg-blue-600 border-blue-400"
           }`} value={answer} onChange={(e) => setAnswer(e.target.value)} />
       </div>
-      <Button className='bg-blue-300 hover:bg-blue-200 w-fit p-6' onClick={onGoHome}>Home</Button>
+      <Button className='bg-blue-700 hover:bg-blue-500 w-30 h-20 p-6' onClick={onGoHome}>Home</Button>
     </div>
   );
 }

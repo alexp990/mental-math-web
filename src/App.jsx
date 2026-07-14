@@ -29,7 +29,7 @@ function App() {
 
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
-    subtraction: { min1: 100, max1: 2, min2: 100, max2: 2 },
+    subtraction: { min1: 2, max1: 100, min2: 2, max2: 100 },
     multiplication: { min1: 2, max1: 12, min2: 2, max2: 12 },
     division: { min1: 2, max1: 12, min2: 2, max2: 12 }
   });
@@ -136,6 +136,20 @@ function App() {
   if (!user) {
     return <LoginScreen />;
   }
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter' && currentScreen === 'landing') {
+        startGame();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [currentScreen, selectedModes, startGame]);
+
 
   return (
     <div className='flex min-h-screen w-full flex-col justify-center items-center bg-blue-950'>
