@@ -1,6 +1,6 @@
 import { Button } from './components/ui/button';
 
-export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
+export function LandingScreen({ onSignOut,onStartGame, selectedModes, setSelectedModes, ranges, setRanges, userTime, setUserTime }) {
 
   const handleRangeChange = (mode, field, newValue) => {
     setRanges({
@@ -22,6 +22,9 @@ export function LandingScreen({ onStartGame, selectedModes, setSelectedModes, ra
   return (
     <div className='flex flex-col justify-center items-center gap-8 text-white'>
       <h2 className='text-6xl'>Select Gamemodes</h2>
+      <Button onClick={onSignOut}>
+        Sign out
+      </Button>
       <div className='flex flex-col items-start gap-6'>
         {availableModes.map((mode) => (
           <div key={mode} className='flex flex-row gap-5 items-center text-4xl'>

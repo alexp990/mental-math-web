@@ -3,29 +3,13 @@ import { LandingScreen } from './LandingScreen';
 import { GameScreen } from './GameScreen';
 import { ScoreScreen } from './ScoreScreen';
 import { auth } from "./firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { LoginScreen } from "./LoginScreen";
 
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, []);
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!user) {
-    return <LoginScreen />;
-  }
 
   const [gameOver, setGameOver] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -63,6 +47,30 @@ function App() {
     setFinalScore(0);
     setCurrentScreen('landing');
   };
+  const logout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+    if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!user) {
+    return <LoginScreen />;
+  }
+
 
   return (
     <div className='flex min-h-screen w-full flex-col justify-center items-center bg-blue-950'>
@@ -70,6 +78,7 @@ function App() {
       {/* SCREEN 1: LANDING SCREEN */}
       {currentScreen === 'landing' && (
         <LandingScreen
+          onSignOut={logout}
           onStartGame={startGame}
           selectedModes={selectedModes}
           setSelectedModes={setSelectedModes}
