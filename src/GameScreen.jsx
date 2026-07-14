@@ -78,8 +78,8 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
           setTimeout(() => {
             setFlash("");
             setAnswer("");
-            setWrong(w =>(w+1));
-            setCurrQuestion(generateQuestion());
+            setWrong(w => (w + 1));
+            // setCurrQuestion(generateQuestion());
           }, 75);
 
         }
@@ -98,17 +98,17 @@ export function GameScreen({ onGoHome, selectedModes, ranges, onGameOver, userTi
     if (!started) return;
 
     const interval = setInterval(() => {
-      setTime(t => (t-1));
+      setTime(t => (t - 1));
       setElapsed(e => (e + 1));
     }, 1000);
     return () => clearInterval(interval);
 
   }, [started])
   useEffect(() => {
-  if (time <= 0) {
-    setStarted(false);
-    onGameOver({ score, wrong });
-  }
+    if (time <= 0) {
+      setStarted(false);
+      onGameOver({ score, wrong });
+    }
   }, [time, score, wrong, onGameOver]);
 
   return (
