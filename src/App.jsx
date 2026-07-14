@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LandingScreen } from './LandingScreen';
 import { GameScreen } from './GameScreen';
 import { ScoreScreen } from './ScoreScreen';
@@ -31,7 +31,7 @@ function App() {
     setCurrentScreen('game');
   };
 
-  const endGame = ({score,wrong}) => {
+  const endGame = ({ score, wrong }) => {
     setFinalScore(score);
     setFinalWrong(wrong)
     setCurrentScreen('results');
@@ -41,6 +41,20 @@ function App() {
     setFinalScore(0);
     setCurrentScreen('landing');
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter' && currentScreen === 'landing') {
+        startGame();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [currentScreen, selectedModes, startGame]);
+
 
   return (
     <div className='flex min-h-screen w-full flex-col justify-center items-center bg-blue-950'>
