@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { LandingScreen } from "./LandingScreen";
 import { GameScreen } from "./GameScreen";
 import { ScoreScreen } from "./ScoreScreen";
+import { StatsScreen } from "./StatsScreen";
 
 import { auth, db } from "./firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
@@ -49,6 +50,10 @@ function App() {
 
     setCurrentScreen("game");
   };
+
+  const gotoStatsScreen = () => {
+    setCurrentScreen("stats");
+  }
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -141,6 +146,13 @@ function App() {
           setRanges={setRanges}
           userTime={userTime}
           setUserTime={setUserTime}
+          gotoStatsScreen={gotoStatsScreen}
+        />
+      )}
+
+      {currentScreen === "stats" && (
+        <StatsScreen
+          onGoHome={() => setCurrentScreen("landing")}
         />
       )}
 
