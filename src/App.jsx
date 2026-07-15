@@ -9,7 +9,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { LoginScreen } from "./LoginScreen";
 
-import { doc, getDoc, setDoc, addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, addDoc, collection, getDocs, query, orderBy } from "firebase/firestore";
 
 function App() {
   const gameSaved = useRef(false);
@@ -34,6 +34,8 @@ function App() {
     totalCorrect: 0,
     totalWrong: 0,
   });
+
+  const [historicalSessions, setHistoricalSessions] = useState([]);
 
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
@@ -81,6 +83,7 @@ function App() {
     if (!user) return;
 
     async function load() {
+      // Fetch General Stats
       const ref = doc(db, "users", user.uid, "stats", "overall");
 
       const snap = await getDoc(ref);
@@ -88,6 +91,18 @@ function App() {
       if (snap.exists()) {
         setStats(snap.data());
       }
+      // Fetch All Sessions 
+      const sessionsRef = collection(db, "users", user.uid, "sessions");
+      const q = query(sessionsRef, orderBy("date", "desc"));
+      const querySnap = await getDocs(q);
+
+      // Make into JS object 
+      const historicalData = querySnap.docs.map(doc => ({
+        id: doc.id, ...doc.data()
+      }));
+
+      setHistoricalSessions(historicalData);
+
     }
 
     load();
@@ -102,14 +117,15 @@ function App() {
     setFinalScore(score);
     setFinalWrong(wrong);
 
-    await addDoc(collection(db, "users", user.uid, "sessions"), {
+    const newSessionData = {
       score,
       wrong,
       percentage: Math.round((score / (score + wrong)) * 100) || 0,
       time: userTime,
       scoretimeratio: score / userTime,
       date: new Date().toISOString(),
-    });
+    };
+    await addDoc(collection(db, "users", user.uid, "sessions"), newSessionData);
 
     const newStats = {
       highScore: Math.max(stats.highScore, score),
@@ -119,6 +135,7 @@ function App() {
     };
 
     await setDoc(doc(db, "users", user.uid, "stats", "overall"), newStats);
+    setHistoricalSessions((prev) => [newSessionData, ...prev]); // So we dont have to redownload entire history (only have to redownload at start)
 
     setStats(newStats);
 
@@ -153,6 +170,7 @@ function App() {
       {currentScreen === "stats" && (
         <StatsScreen
           onGoHome={() => setCurrentScreen("landing")}
+          historicalSessions={historicalSessions}
         />
       )}
 
