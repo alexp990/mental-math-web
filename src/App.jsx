@@ -102,7 +102,6 @@ function App() {
       }));
 
       setHistoricalSessions(historicalData);
-      console.log("Historical Data", historicalData);
 
     }
 
@@ -118,14 +117,15 @@ function App() {
     setFinalScore(score);
     setFinalWrong(wrong);
 
-    await addDoc(collection(db, "users", user.uid, "sessions"), {
+    const newSessionData = {
       score,
       wrong,
       percentage: Math.round((score / (score + wrong)) * 100) || 0,
       time: userTime,
       scoretimeratio: score / userTime,
       date: new Date().toISOString(),
-    });
+    };
+    await addDoc(collection(db, "users", user.uid, "sessions"), newSessionData);
 
     const newStats = {
       highScore: Math.max(stats.highScore, score),
@@ -135,6 +135,7 @@ function App() {
     };
 
     await setDoc(doc(db, "users", user.uid, "stats", "overall"), newStats);
+    setHistoricalSessions((prev) => [newSessionData, ...prev]); // So we dont have to redownload entire history (only have to redownload at start)
 
     setStats(newStats);
 
@@ -169,6 +170,7 @@ function App() {
       {currentScreen === "stats" && (
         <StatsScreen
           onGoHome={() => setCurrentScreen("landing")}
+          historicalSessions={historicalSessions}
         />
       )}
 
