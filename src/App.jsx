@@ -9,7 +9,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 
 import { LoginScreen } from "./LoginScreen";
 
-import { doc, getDoc, setDoc, addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, addDoc, collection, getDocs, query, orderBy } from "firebase/firestore";
 
 function App() {
   const gameSaved = useRef(false);
@@ -34,6 +34,8 @@ function App() {
     totalCorrect: 0,
     totalWrong: 0,
   });
+
+  const [historicalSessions, setHistoricalSessions] = useState([]);
 
   const [ranges, setRanges] = useState({
     addition: { min1: 2, max1: 100, min2: 2, max2: 100 },
@@ -81,6 +83,7 @@ function App() {
     if (!user) return;
 
     async function load() {
+      // Fetch General Stats
       const ref = doc(db, "users", user.uid, "stats", "overall");
 
       const snap = await getDoc(ref);
@@ -88,6 +91,19 @@ function App() {
       if (snap.exists()) {
         setStats(snap.data());
       }
+      // Fetch All Sessions 
+      const sessionsRef = collection(db, "users", user.uid, "sessions");
+      const q = query(sessionsRef, orderBy("date", "desc"));
+      const querySnap = await getDocs(q);
+
+      // Make into JS object 
+      const historicalData = querySnap.docs.map(doc => ({
+        id: doc.id, ...doc.data()
+      }));
+
+      setHistoricalSessions(historicalData);
+      console.log("Historical Data", historicalData);
+
     }
 
     load();
